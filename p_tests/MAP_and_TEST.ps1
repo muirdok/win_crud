@@ -34,7 +34,7 @@ $test2 = Test-Path -Path "$($disk_name)\$($folder_name)_renamed"
 $test3 = Test-Path -Path "$($disk_name)\$($file_name)_renamed.txt"
 
 
-If (($test1) -and ($test2)-and ($test3)) {"tests are passed"}
+If (($test1) -and ($test2)-and ($test3)) {"Creating tests are passed"}
 Else {exit 1}
 
 #Remove all of them
@@ -47,7 +47,7 @@ $test4 = -Not (Test-Path -Path "$($disk_name)\$($folder_name)_renamed\$($file_na
 $test5 = -Not (Test-Path -Path "$($disk_name)\$($folder_name)_renamed")
 $test6 = -Not (Test-Path -Path "$($disk_name)\$($file_name)_renamed.txt")
 
-If (($test4) -and ($test5)-and ($test6)) {"tests are passed"}
+If (($test4) -and ($test5)-and ($test6)) {"Deleting tests are passed"}
 Else {exit 1}
 
 #Checking block should be here
