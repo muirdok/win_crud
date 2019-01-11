@@ -43,5 +43,8 @@ Test-Path -Path "$($disk_name)\$($folder_name)_renamed\$($file_name)"
 Test-Path -Path "$($disk_name)\$($folder_name)_renamed"
 Test-Path -Path "$($disk_name)\$($file_name)_renamed.txt"
 
+#Checking block should be here
+exit 1
+
 net use /d $disk_name
 #Remove-PSDrive -Name $disk_name
