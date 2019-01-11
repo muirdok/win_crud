@@ -28,23 +28,29 @@ Rename-Item -Path "$($disk_name)\$($folder_name)" -NewName "$($disk_name)\$($fol
 "UPDATED txt FILE" | Set-Content "$($disk_name)\$($file_name)_renamed.txt"
 New-Item -Path "$($disk_name)\$($folder_name)_renamed\" -Name $file_name -ItemType "file" -Value "This is a text string for CRUD testing. update direcrory with a file."
 
-#Checking files and directory
-Test-Path -Path "$($disk_name)\$($folder_name)_renamed\$($file_name)"
-Test-Path -Path "$($disk_name)\$($folder_name)_renamed"
-Test-Path -Path "$($disk_name)\$($file_name)_renamed.txt"
+#Checking files and directory all should be true
+$test1 = Test-Path -Path "$($disk_name)\$($folder_name)_renamed\$($file_name)"
+$test2 = Test-Path -Path "$($disk_name)\$($folder_name)_renamed"
+$test3 = Test-Path -Path "$($disk_name)\$($file_name)_renamed.txt"
+
+
+If (($test1) -and ($test2)-and ($test3)) {"tests are passed"}
+Else {exit 1}
 
 #Remove all of them
 Remove-Item -Path "$($disk_name)\$($folder_name)_renamed\$($file_name)" -Force
 Remove-Item -Path "$($disk_name)\$($folder_name)_renamed" -Force
 Remove-Item -Path "$($disk_name)\$($file_name)_renamed.txt" -Force
 
-#Checking files and directory
-Test-Path -Path "$($disk_name)\$($folder_name)_renamed\$($file_name)"
-Test-Path -Path "$($disk_name)\$($folder_name)_renamed"
-Test-Path -Path "$($disk_name)\$($file_name)_renamed.txt"
+#Checking files and directory all should be false
+$test4 = -Not (Test-Path -Path "$($disk_name)\$($folder_name)_renamed\$($file_name)")
+$test5 = -Not (Test-Path -Path "$($disk_name)\$($folder_name)_renamed")
+$test6 = -Not (Test-Path -Path "$($disk_name)\$($file_name)_renamed.txt")
+
+If (($test4) -and ($test5)-and ($test6)) {"tests are passed"}
+Else {exit 1}
 
 #Checking block should be here
-exit 1
 
 net use /d $disk_name
 #Remove-PSDrive -Name $disk_name
