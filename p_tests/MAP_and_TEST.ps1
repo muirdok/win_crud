@@ -3,7 +3,7 @@
 $user_name = "admin"
 $user_password = "Nexenta1!"
 $disk_name = "Z:"
-$unc_path = "\\192.168.201.166\kek_fs1"
+$unc_path = "\\10.3.76.29\kek_fs1"
 $file_name = "testfile.txt"
 $folder_name = "testfolder"
 
