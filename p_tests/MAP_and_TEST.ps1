@@ -12,7 +12,8 @@ $folder_name = "testfolder"
 
 #Atach disk
 #New-PSDrive -Persist -Name $disk_name -PSProvider "FileSystem" -Root $unc_path -Credential $user_credential
-net use $disk_name $unc_path /user:$user_name $user_password
+#net use $disk_name $unc_path /user:$user_name $user_password
+net use $disk_name $unc_path
 Start-Sleep -m 500
 
 #Create file and directory
