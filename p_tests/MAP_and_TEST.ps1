@@ -1,9 +1,11 @@
 ﻿# Some CRUD tests
+param(
+[string]$ns_ip=""
+)
 
-$user_name = "admin"
-$user_password = "Nexenta1!"
+
 $disk_name = "Z:"
-$unc_path = "\\10.3.76.29\kek_fs1"
+$unc_path = "\\"+ns_ip+"\kek_fs1"
 $file_name = "testfile.txt"
 $folder_name = "testfolder"
 
