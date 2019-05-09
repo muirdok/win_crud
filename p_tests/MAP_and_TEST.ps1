@@ -5,7 +5,7 @@ param(
 
 
 $disk_name = "Z:"
-$unc_path = "\\"+ns_ip+"\kek_fs1"
+$unc_path = "\\"+$ns_ip+"\kek_fs1"
 $file_name = "testfile.txt"
 $folder_name = "testfolder"
 
