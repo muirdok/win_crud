@@ -1,13 +1,14 @@
 ﻿# Some CRUD tests
 param(
-[string]$ns_ip=""
+[string]$ns_ip
 )
-
 
 $disk_name = "Z:"
 $unc_path = "\\"+$ns_ip+"\kek_fs1"
 $file_name = "testfile.txt"
 $folder_name = "testfolder"
+
+Write-Host "UNC is: "+$unc_path
 
 #$user_password = ConvertTo-SecureString -String $user_password -AsPlainText -Force
 #$user_credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $user_name, $user_password
@@ -15,7 +16,6 @@ $folder_name = "testfolder"
 #Atach disk
 #New-PSDrive -Persist -Name $disk_name -PSProvider "FileSystem" -Root $unc_path -Credential $user_credential
 #net use $disk_name $unc_path /user:$user_name $user_password
-Write-Host "RUN from PSHELL: net use"+" "+$disk_name+" "+$unc_path
 net use $disk_name $unc_path
 Start-Sleep -m 500
 
