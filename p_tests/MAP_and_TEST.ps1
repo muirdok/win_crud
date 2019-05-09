@@ -3,6 +3,8 @@ param(
 [string]$ns_ip
 )
 
+$ErrorActionPreference = "Stop"
+
 $disk_name = "Z:"
 $unc_path = "\\$ns_ip\kek_fs1"
 $file_name = "testfile.txt"
@@ -58,4 +60,3 @@ Else {exit 1}
 
 net use /d $disk_name
 #Remove-PSDrive -Name $disk_name
-$ErrorActionPreference = "Stop"
