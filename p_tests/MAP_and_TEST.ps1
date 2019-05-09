@@ -1,14 +1,15 @@
-﻿# Some CRUD tests
+# Some CRUD tests
 param(
 [string]$ns_ip
 )
 
 $disk_name = "Z:"
-$unc_path = "\\"+$ns_ip+"\kek_fs1"
+$unc_path = "\\$ns_ip\kek_fs1"
 $file_name = "testfile.txt"
 $folder_name = "testfolder"
 
-Write-Host "UNC is: "+$unc_path
+Write-Host ("IP is: " + $ns_ip)
+Write-Host ("UNC is: " + $unc_path)
 
 #$user_password = ConvertTo-SecureString -String $user_password -AsPlainText -Force
 #$user_credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $user_name, $user_password
