@@ -1,0 +1,1 @@
+                 #sh "ansible-playbook run_me.yml --extra-vars \\\"config_vm_name=${params.VM_NAME} pxe_iso_name=${params.ISO_NAME} napalm_user=${params.USER} napalm_pass=${params.PASS}\\\""
