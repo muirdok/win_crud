@@ -21,7 +21,7 @@ pipeline {
     stages {
 stage('Deploy and configure NS Appalince for 2008R2AD') {
            steps {
-             node('ANSIBLEBUNTU') {
+             node('ansible') {
                  deleteDir()
                  git url: 'https://github.com/muirdok/deploy_ns.git'
                  dir("${WORKSPACE}") {
