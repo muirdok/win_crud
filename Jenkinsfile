@@ -9,7 +9,7 @@ pipeline {
     parameters {
         string(name: 'AD_IP_2019', defaultValue: '10.3.69.70', description: 'Windows AD 2019 Server IP')
         string(name: 'AD_NAME_2019', defaultValue: 'nex2019.test', description: 'Windows AD 2019 Domain Name')
-        string(name: 'VM_NAME', defaultValue: 'MUT_WIN_AD_', description: 'VM Name for VCenter')
+        string(name: 'VM_NAME', defaultValue: 'MUT_WIN_AD', description: 'VM Name for VCenter')
 
     }
     stages {
