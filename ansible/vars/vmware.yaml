@@ -1,5 +1,5 @@
 #VmWare
-config_vsphere_host: "vcenter.hypernexenta.corp/"
+config_vsphere_host: "vcenter.hypernexenta.corp"
 config_vsphere_user: "administrator@hypernexenta.corp"
 config_vsphere_password: "Nexenta1!"
 config_vsphere_datacenter: "AutoD"
