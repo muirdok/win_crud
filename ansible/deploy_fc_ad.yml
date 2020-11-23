@@ -1,87 +1,94 @@
 ---
-- name: Destroy Virtual Machine
-  community.vmware.vmware_guest:
-    validate_certs: False
-    hostname: "{{ config_vsphere_host }}"
-    username: "{{ config_vsphere_user }}"
-    password: "{{ config_vsphere_password }}"
-    datacenter: "{{ config_vsphere_datacenter }}"
-    cluster: "{{ config_vsphere_cluster }}"
-    folder: "/{{ config_vsphere_folder }}"
-    name: "{{ config_vm_name }}"
-    state: "absent"
-    force: yes
+- hosts: pxe_server_lab
+  gather_facts: no
+  user: root
+  vars_files:
+    - vars/common.yml
+    - vars/vmware.yaml
+  tasks:
+  - name: Destroy Virtual Machine
+    community.vmware.vmware_guest:
+        validate_certs: False
+        hostname: "{{ config_vsphere_host }}"
+        username: "{{ config_vsphere_user }}"
+        password: "{{ config_vsphere_password }}"
+        datacenter: "{{ config_vsphere_datacenter }}"
+        cluster: "{{ config_vsphere_cluster }}"
+        folder: "/{{ config_vsphere_folder }}"
+        name: "{{ config_vm_name }}"
+        state: "absent"
+        force: yes
 
-- name: Create Virtual Machine
-  community.vmware.vmware_guest:
-    validate_certs: False
-    hostname: "{{ config_vsphere_host }}"
-    username: "{{ config_vsphere_user }}"
-    password: "{{ config_vsphere_password }}"
-    datacenter: "{{ config_vsphere_datacenter }}"
-    cluster: "{{ config_vsphere_cluster }}"
-    folder: "/{{ config_vsphere_folder }}/W"
-    name: "{{ config_vm_name }}"
-    guest_id: "{{ config_vm_guest }}"
-    disk:
-    - size_gb: 20
-      type: thin
-      datastore: "{{ config_vm_datastore }}"
-    - size_gb: 16
-      type: thin
-      datastore: "{{ config_vm_datastore }}"
-    - size_gb: 16
-      type: thin
-      datastore: "{{ config_vm_datastore }}"
-    - size_gb: 16
-      type: thin
-      datastore: "{{ config_vm_datastore }}"
-    - size_gb: 16
-      type: thin
-      datastore: "{{ config_vm_datastore }}"
-    hardware:
-      memory_mb: 10240
-      num_cpus: 4
-      scsi: lsilogic
-    networks:
-    - name: "{{ config_vm_net2 }}"
-      mac: "{{ MAC_Firecrest-latest | community.general.random_mac }}"
-      device_type: vmxnet3
-    - name: "{{ config_vm_net1 }}"
-      device_type: vmxnet3
-    wait_for_ip_address: True
-    wait_for_ip_address_timeout: 1200
-    register: createvm_out
+  - name: Create Virtual Machine
+    community.vmware.vmware_guest:
+        validate_certs: False
+        hostname: "{{ config_vsphere_host }}"
+        username: "{{ config_vsphere_user }}"
+        password: "{{ config_vsphere_password }}"
+        datacenter: "{{ config_vsphere_datacenter }}"
+        cluster: "{{ config_vsphere_cluster }}"
+        folder: "/{{ config_vsphere_folder }}/W"
+        name: "{{ config_vm_name }}"
+        guest_id: "{{ config_vm_guest }}"
+        disk:
+        - size_gb: 20
+          type: thin
+          datastore: "{{ config_vm_datastore }}"
+        - size_gb: 16
+          type: thin
+          datastore: "{{ config_vm_datastore }}"
+        - size_gb: 16
+          type: thin
+          datastore: "{{ config_vm_datastore }}"
+        - size_gb: 16
+          type: thin
+          datastore: "{{ config_vm_datastore }}"
+        - size_gb: 16
+          type: thin
+          datastore: "{{ config_vm_datastore }}"
+        hardware:
+          memory_mb: 10240
+          num_cpus: 4
+          scsi: lsilogic
+        networks:
+        - name: "{{ config_vm_net2 }}"
+          mac: "{{ MAC_Firecrest-latest | community.general.random_mac }}"
+          device_type: vmxnet3
+        - name: "{{ config_vm_net1 }}"
+          device_type: vmxnet3
+        wait_for_ip_address: True
+        wait_for_ip_address_timeout: 1200
+        register: createvm_out
 
 
-- name: Gather some info from a guest using the vSphere API output schema
-  community.vmware.vmware_guest_info:
-   hostname: "{{ config_vsphere_host }}"
-   username: "{{ config_vsphere_user }}"
-   password: "{{ config_vsphere_password }}"
-   validate_certs: no
-   datacenter: "{{ config_vsphere_datacenter }}"
-   name: "{{ config_vm_name }}"
-  register: vm_info
+  - name: Gather some info from a guest using the vSphere API output schema
+    community.vmware.vmware_guest_info:
+       hostname: "{{ config_vsphere_host }}"
+       username: "{{ config_vsphere_user }}"
+       password: "{{ config_vsphere_password }}"
+       validate_certs: no
+       datacenter: "{{ config_vsphere_datacenter }}"
+       name: "{{ config_vm_name }}"
+    register: vm_info
 
-- set_fact:
-     vm_fc_ip: "{{ vm_info.instance.ipv4 }}"
-- debug: msg="{{ vm_info }}"
+  - set_fact:
+       vm_fc_ip: "{{ vm_info.instance.ipv4 }}"
+  - debug: msg="{{ vm_info }}"
 
-- copy: content="{{ vm_info.instance.ipv4 }}" dest="{{ config_vm_name }}.ipv4"
+  - copy: content="{{ vm_info.instance.ipv4 }}" dest="{{ config_vm_name }}.ipv4"
 
-- name: Wait for SSH Port to Become Open and Contain "OpenSSH"
-  wait_for:
-    port: 22
-    host: "{{ vm_fc_ip }}"
-    search_regex: "OpenSSH"
+  - name: Wait for SSH Port to Become Open and Contain "OpenSSH"
+    wait_for:
+        port: 22
+        host: "{{ vm_fc_ip }}"
+        search_regex: "OpenSSH"
 
-- name: Add IP to VMName to inventory
-  add_host:
-    name: "{{ config_vm_name }}"
-    ansible_ssh_host: "{{ info.instance.ipv4 }}"
-    ansible_ssh_user: "{{ config_applaince_root }}"
-    ansible_ssh_pass: "{{ config_applaince_root_pass }}"
-    ansible_connection: "ssh"
-    ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+  - name: Add IP to VMName to inventory
+    add_host:
+        name: "{{ config_vm_name }}"
+        ansible_ssh_host: "{{ info.instance.ipv4 }}"
+        ansible_ssh_user: "{{ config_applaince_root }}"
+        ansible_ssh_pass: "{{ config_applaince_root_pass }}"
+        ansible_connection: "ssh"
+        ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
 ...

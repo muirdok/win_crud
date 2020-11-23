@@ -1,0 +1,15 @@
+[localhost]
+127.0.0.1  ansible_connection=local
+
+[smbtorture_hosts]
+smbtorture403 ansible_host=172.16.13.196 ansible_connection=ssh ansible_port=22 ansible_user=user ansible_ssh_pass=nexenta
+smbtorture ansible_host=192.168.122.178 ansible_connection=ssh ansible_port=22 ansible_user=user ansible_ssh_pass=nexenta
+
+[pxe_servers]
+pxe_server_home ansible_host=172.16.13.100 ansible_connection=ssh ansible_port=22 ansible_user=muirdok ansible_ssh_pass=Fuckoffyou1! ansible_sudo_pass=Fuckoffyou1!
+pxe_server_sc ansible_host=10.3.79.163 ansible_connection=ssh ansible_port=22 ansible_user=root ansible_ssh_pass=nexenta ansible_sudo_pass=nexenta
+pxe_server_lab ansible_host=10.3.70.150 ansible_connection=ssh ansible_port=22 ansible_user=root ansible_ssh_pass=nexenta ansible_sudo_pass=nexenta
+
+
+[applainces]
+testaplaince ansible_host=172.16.13.55 ansible_connection=ssh ansible_port=22 ansible_user=root ansible_ssh_pass=plusultra
