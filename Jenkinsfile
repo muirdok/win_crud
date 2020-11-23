@@ -9,6 +9,8 @@ pipeline {
     parameters {
         string(name: 'AD_IP_2019', defaultValue: '10.3.69.70', description: 'Windows AD 2019 Server IP')
         string(name: 'AD_NAME_2019', defaultValue: 'nex2019.test', description: 'Windows AD 2019 Domain Name')
+        string(name: 'VM_NAME', defaultValue: 'MUT_WIN_AD_', description: 'VM Name for VCenter')
+
     }
     stages {
 stage('Deploy and configure Appalince to join to 2019 Active Directory') {
@@ -20,6 +22,7 @@ stage('Deploy and configure Appalince to join to 2019 Active Directory') {
                          ansiblePlaybook(
                              playbook: 'ansible/deploy_fc_ad.yml',
                              extraVars: [
+                                         config_vm_name: params.VM_NAME + "_" + env.BUILD_NUMBER,
                                          ad_ip: params.AD_IP_2019,
                                          ad_name: params.AD_NAME_2019
                                      ]
