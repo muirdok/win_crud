@@ -3,7 +3,7 @@
   gather_facts: no
   user: root
   vars_files:
-    - vars/common.yml
+    - vars/common.yaml
     - vars/vmware.yaml
   tasks:
   - name: Destroy Virtual Machine
