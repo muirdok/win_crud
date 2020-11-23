@@ -86,7 +86,7 @@
   - name: Add IP to VMName to inventory
     add_host:
         name: "{{ config_vm_name }}"
-        ansible_ssh_host: "{{ info.instance.ipv4 }}"
+        ansible_ssh_host: "{{ vm_info.instance.ipv4 }}"
         ansible_ssh_user: "{{ config_applaince_root }}"
         ansible_ssh_pass: "{{ config_applaince_root_pass }}"
         ansible_connection: "ssh"
