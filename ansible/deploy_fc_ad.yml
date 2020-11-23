@@ -5,6 +5,8 @@
   vars_files:
     - vars/common.yaml
     - vars/vmware.yaml
+  var:
+    MAC: "{{ MAC_Firecrest_latest }}"
   tasks:
   - name: Destroy Virtual Machine
     community.vmware.vmware_guest:
@@ -52,7 +54,7 @@
           scsi: lsilogic
         networks:
         - name: "{{ config_vm_net2 }}"
-          mac: "{{ MAC_Firecrest-latest | community.general.random_mac }}"
+          mac: "{{ MAC | community.general.random_mac }}"
           device_type: vmxnet3
         - name: "{{ config_vm_net1 }}"
           device_type: vmxnet3

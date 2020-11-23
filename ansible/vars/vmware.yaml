@@ -13,4 +13,4 @@ config_vm_net1: "1GB"
 config_vm_net2: "10GB"
 config_vm_datastore: "autoD"
 
-MAC_Firecrest-latest: "00:60:40"
+MAC_Firecrest_latest: "00:60:40"
