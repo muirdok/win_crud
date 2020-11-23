@@ -1,6 +1,6 @@
 #VmWare
 config_vsphere_host: "vcenter.hypernexenta.corp"
-config_vsphere_user: "administrator@hypernexenta.corp"
+config_vsphere_user: "administrator@vsphere.local"
 config_vsphere_password: "Nexenta1!"
 config_vsphere_datacenter: "AutoD"
 config_vsphere_cluster: "R720s"
