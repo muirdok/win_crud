@@ -5,7 +5,7 @@
   vars_files:
     - vars/common.yaml
     - vars/vmware.yaml
-  var:
+  vars:
     MAC: "{{ MAC_Firecrest_latest }}"
   tasks:
   - name: Destroy Virtual Machine
@@ -60,7 +60,6 @@
           device_type: vmxnet3
         wait_for_ip_address: True
         wait_for_ip_address_timeout: 1200
-        register: createvm_out
 
   - name: Gather some info from a guest using the vSphere API output schema
     community.vmware.vmware_guest_info:
@@ -92,4 +91,40 @@
         ansible_ssh_pass: "{{ config_applaince_root_pass }}"
         ansible_connection: "ssh"
         ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+
+# Configure and join to AD part
+- hosts: "{{ config_vm_name }}"
+  gather_facts: yes
+  user: "{{ config_applaince_root }}"
+  vars_files:
+    - vars/common.yaml
+  tasks:
+  - name: Create FS
+    shell: zfs create {{config_applaince_pool}}/{{config_applaince_pool_fs}}
+
+  - name: Share FS
+    shell: zfs set sharesmb=on {{config_applaince_pool}}/{{config_applaince_pool_fs}}
+
+  - name: Give all ACL's
+    shell: chmod 777 /{{config_applaince_pool}}/{{config_applaince_pool_fs}}
+
+  - name: FIX smbpasswd
+    shell: echo "root:0::C06B4988507F79FBA2280897378B5973" >> /var/smb/smbpasswd
+
+  - name: Join NS to AD
+    block:
+      - name: Set full ACL for directory
+        command: chmod 777 /"{{ config_applaince_pool }}"/"{{ config_applaince_pool_fs }}"
+      - name: Set DNS server for AD Server
+        shell: echo nameserver "{{ ad_ip }}" > /etc/resolv.conf
+      - name: Disable NTP
+        command: svcadm disable ntp
+      - name: sync time with AD
+        command: ntpdate "{{ ad_name }}"
+      - name: sync time with AD
+        command: /usr/nef/cli/sbin/smb join domain "{{ ad_admin }}" --password="{{ ad_admin_pass }}" "{{ ad_name }}"
+    when: ad_name is defined and ad_ip is defined
+    rescue:
+      - debug:
+          msg: 'UNABLE TO JOIN TO AD. SUCKS!'
 ...

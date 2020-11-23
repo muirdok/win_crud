@@ -1,2 +1,11 @@
 ---
+# applaince params
+config_applaince_root: "root"
+config_applaince_root_pass: "nexenta"
+config_applaince_admin: "root"
+config_applaince_admin_pass: "nexenta"
+config_applaince_pool: "rpool"
+config_applaince_pool_fs: "fs1"
+config_applaince_ip: "192.168.122.49"
+config_applaince_cifs_share: "kek_fs1"
 ...
