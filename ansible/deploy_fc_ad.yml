@@ -1,6 +1,4 @@
 ---
-- set_fact: applaince_mac1="{{ FC_MAC | community.general.random_mac }}"
-
 - name: Destroy Virtual Machine
   community.vmware.vmware_guest:
     validate_certs: False
