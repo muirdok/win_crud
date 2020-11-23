@@ -1,156 +1,42 @@
-def PowerShell(psCmd) {	
-    psCmd=psCmd.replaceAll("%", "%%")	
-    bat "powershell.exe -NonInteractive -ExecutionPolicy Bypass -Command \"\$ErrorActionPreference='Stop';[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;$psCmd;EXIT \$global:LastExitCode\""	
+def PowerShell(psCmd) {
+    psCmd=psCmd.replaceAll("%", "%%")
+    bat "powershell.exe -NonInteractive -ExecutionPolicy Bypass -Command \"\$ErrorActionPreference='Stop';[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;$psCmd;EXIT \$global:LastExitCode\""
 }
-NS_IP = 'initial_value'
+APPALINCE_IP = 'initial_value'
 
 pipeline {
     agent { label 'master' }
     parameters {
-        string(name: 'VM_NAME', defaultValue: 'Test_me', description: 'VM Name for VCenter')
-        string(name: 'ISO_NAME', defaultValue: 'NexentaStor5.2.1.6_CERT.iso', description: 'ISO name for napalm')
-        string(name: 'USER', defaultValue: 'georgy.malakyan', description: 'Same user for napalm and testrails')
-        password(name: 'PASS', defaultValue: 'SECRET', description: 'Same pasword for napalm and testrails user')
-        string(name: 'AD_IP_2012', defaultValue: '10.3.69.40', description: 'Windows AD 2012 Server IP')
-        string(name: 'AD_NAME_2012', defaultValue: 'nex2012r2.test', description: 'Windows AD 2012 Domain Name')
-        string(name: 'AD_IP_2016', defaultValue: '10.3.69.60', description: 'Windows AD 2016 Server IP')
-        string(name: 'AD_NAME_2016', defaultValue: 'nex2016.test', description: 'Windows AD 2016 Domain Name')
-        string(name: 'AD_IP_2008', defaultValue: '10.3.69.80', description: 'Windows AD 2016 Server IP')
-        string(name: 'AD_NAME_2008', defaultValue: 'nex2008r2.test', description: 'Windows AD 2016 Domain Name')        
+        string(name: 'AD_IP_2019', defaultValue: '10.3.69.70', description: 'Windows AD 2019 Server IP')
+        string(name: 'AD_NAME_2019', defaultValue: 'nex2019.test', description: 'Windows AD 2019 Domain Name')
     }
     stages {
-stage('Deploy and configure NS Appalince for 2008R2AD') {
+stage('Deploy and configure Appalince to join to 2019 Active Directory') {
            steps {
-             node('ansible') {
+             node('master') {
                  deleteDir()
-                 git url: 'https://github.com/muirdok/deploy_ns.git'
+                 git url: 'https://github.com/muirdok/win_crud'
                  dir("${WORKSPACE}") {
                          ansiblePlaybook(
-                             playbook: 'run_me.yml',
+                             playbook: 'ansible/deploy_fc_ad.yml',
                              extraVars: [
-                                         config_vm_name: params.VM_NAME,
-                                         pxe_iso_name: params.ISO_NAME,
-                                         napalm_user: params.USER,
-                                         napalm_pass: [value: params.PASS, hidden: true],
-                                         ad_ip: params.AD_IP_2008,
-                                         ad_name: params.AD_NAME_2008
+                                         ad_ip: params.AD_IP_2019,
+                                         ad_name: params.AD_NAME_2019
                                      ]
                                  )
                          script {
-                             NS_IP = readFile 'ns_ip'
+                             APPALINCE_IP = readFile 'applaince_ip.txt'
                                 }
                              }
                          }
                     }
                }
-    stage('Run CRUD nex2008r2.test Win2012r2.client') {
+    stage('Run CRUD on nex2019.test.win2019.client') {
            steps {
-             node('nex2008r2.test.Win2012r2.client') {
+             node('nex2019.test.win2019.client') {
                  deleteDir()
                  git url: 'https://github.com/muirdok/win_crud.git'
-                     powershell returnStatus: true, script: """p_tests\\MAP_and_TEST.ps1 -ns_ip ${NS_IP}"""
-                       }
-                  }
-             }
-    stage('Run CRUD nex2008r2.test Win2016.client') {
-           steps {
-             node('nex2008r2.test.Win2016.client') {
-                 deleteDir()
-                 git url: 'https://github.com/muirdok/win_crud.git'
-                     powershell returnStatus: true, script: """p_tests\\MAP_and_TEST.ps1 -ns_ip ${NS_IP}"""
-                       }
-                  }
-             }        
-        stage('Deploy and configure NS Appalince for 2012R2AD') {
-           steps {
-             node('ANSIBLEBUNTU') {
-                 deleteDir()
-                 git url: 'https://github.com/muirdok/deploy_ns.git'
-                 dir("${WORKSPACE}") {
-                         ansiblePlaybook(
-                             playbook: 'run_me.yml',
-                             extraVars: [
-                                         config_vm_name: params.VM_NAME,
-                                         pxe_iso_name: params.ISO_NAME,
-                                         napalm_user: params.USER,
-                                         napalm_pass: [value: params.PASS, hidden: true],
-                                         ad_ip: params.AD_IP_2012,
-                                         ad_name: params.AD_NAME_2012
-                                     ]
-                                 )
-                         script {
-                             NS_IP = readFile 'ns_ip'
-                                }
-                             }
-                         }
-                    }
-               }
-    stage('Run CRUD nex2012r2.test Win2012r2.client') {
-           steps {
-             node('nex2012r2.test.Win2012r2.client') {
-                 deleteDir()
-                 git url: 'https://github.com/muirdok/win_crud.git'
-                     powershell returnStatus: true, script: """p_tests\\MAP_and_TEST.ps1 -ns_ip ${NS_IP}"""
-                       }
-                  }
-             }
-    stage('Run CRUD nex2012r2.test Win2016.client') {
-           steps {
-             node('nex2012r2.test.Win2016.client') {
-                 deleteDir()
-                 git url: 'https://github.com/muirdok/win_crud.git'
-                     powershell returnStatus: true, script: """p_tests\\MAP_and_TEST.ps1 -ns_ip ${NS_IP}"""
-                       }
-                  }
-             }
-stage('Deploy and configure NS Appalince for 2016AD') {
-           steps {
-             node('ANSIBLEBUNTU') {
-                 deleteDir()
-                 git url: 'https://github.com/muirdok/deploy_ns.git'
-                 dir("${WORKSPACE}") {
-                         ansiblePlaybook(
-                             playbook: 'run_me.yml',
-                             extraVars: [
-                                         config_vm_name: params.VM_NAME,
-                                         pxe_iso_name: params.ISO_NAME,
-                                         napalm_user: params.USER,
-                                         napalm_pass: [value: params.PASS, hidden: true],
-                                         ad_ip: params.AD_IP_2016,
-                                         ad_name: params.AD_NAME_2016
-                                     ]
-                                 )
-                         script {
-                             NS_IP = readFile 'ns_ip'
-                                }
-                             }
-                         }
-                    }
-               }
-    stage('Run CRUD nex2016.test Win2016.client') {
-           steps {
-             node('nex2016.test.Win2016.client') {
-                 deleteDir()
-                 git url: 'https://github.com/muirdok/win_crud.git'
-                     powershell returnStatus: true, script: """p_tests\\MAP_and_TEST.ps1 -ns_ip ${NS_IP}"""
-                       }
-                  }
-             }
-    stage('Run CRUD nex2016.test Win2012r2.client') {
-           steps {
-             node('nex2016.test.Win2012r2.client') {
-                 deleteDir()
-                 git url: 'https://github.com/muirdok/win_crud.git'
-                     powershell returnStatus: true, script: """p_tests\\MAP_and_TEST.ps1 -ns_ip ${NS_IP}"""
-                       }
-                  }
-             }
-    stage('Run CRUD nex2016.test Win10.client') {
-           steps {
-             node('nex2016.test.Win10.client') {
-                 deleteDir()
-                 git url: 'https://github.com/muirdok/win_crud.git'
-                     powershell returnStatus: true, script: """p_tests\\MAP_and_TEST.ps1 -ns_ip ${NS_IP}"""
+                     powershell returnStatus: true, script: """p_tests\\MAP_and_TEST.ps1 -ns_ip ${APPALINCE_IP}"""
                        }
                   }
              }
