@@ -27,7 +27,7 @@
         password: "{{ config_vsphere_password }}"
         datacenter: "{{ config_vsphere_datacenter }}"
         cluster: "{{ config_vsphere_cluster }}"
-        folder: "/{{ config_vsphere_folder }}/W"
+        folder: "/{{ config_vsphere_folder }}"
         name: "{{ config_vm_name }}"
         guest_id: "{{ config_vm_guest }}"
         disk:
@@ -59,7 +59,6 @@
         wait_for_ip_address: True
         wait_for_ip_address_timeout: 1200
         register: createvm_out
-
 
   - name: Gather some info from a guest using the vSphere API output schema
     community.vmware.vmware_guest_info:
