@@ -120,7 +120,7 @@
       - name: Disable NTP
         command: svcadm disable ntp
       - name: sync time with AD
-        command: ntpdate -bu "{{ ad_ip }}"
+        command: ntpdate -b "{{ ad_ip }}"
       - name: Join to ad
         command: /usr/sbin/smbadmn -y -u  "{{ ad_admin }}%{{ ad_admin_pass }}" "{{ ad_name }}"
     when: ad_name is defined and ad_ip is defined

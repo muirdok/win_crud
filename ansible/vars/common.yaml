@@ -8,4 +8,11 @@ config_applaince_pool: "rpool"
 config_applaince_pool_fs: "fs1"
 config_applaince_ip: "192.168.122.49"
 config_applaince_cifs_share: "kek_fs1"
+
+#ad oarams
+ad_admin: "hadmin"
+ad_admin_pass: "Nexenta1!"
+ad_name: "nex2019.test"
+ad_ip: "10.3.69.60"
+
 ...
