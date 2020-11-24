@@ -60,3 +60,4 @@ Else {exit 1}
 
 net use /d $disk_name
 #Remove-PSDrive -Name $disk_name
+exit $LASTEXITCODE
