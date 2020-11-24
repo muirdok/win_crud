@@ -13,7 +13,7 @@ pipeline {
 
     }
     stages {
-      stage('Run ALL Windows AD Tests in parallel') {
+//      stage('Run ALL Windows AD Tests in parallel') {
             parallel {
               stage('Deploy and configure Appalince to join to 2019 Active Directory') {
                 steps {
@@ -29,15 +29,15 @@ pipeline {
                                           ad_name: params.AD_NAME_2019
                                           ]
                                           )
-                                          script {
-                                            def FILENAME = params.VM_NAME + "_" + env.BUILD_NUMBER + ".ipv4"
-                                            APPALINCE_IP = readFile "ansible/${FILENAME}"
-                                            println(FILENAME)
-                                            println(APPALINCE_IP)
-                                          }
-                                        }
-                                      }
+                              script {
+                                def FILENAME = params.VM_NAME + "_" + env.BUILD_NUMBER + ".ipv4"
+                                APPALINCE_IP = readFile "ansible/${FILENAME}"
+                                println(FILENAME)
+                                println(APPALINCE_IP)
                                     }
+                                  }
+                                }
+                              }
                 steps {
                   node('nex2019.test.win2019.client') {
                       deleteDir()
@@ -47,6 +47,6 @@ pipeline {
           }
         }
       }
-    }
+    //}
   }
 }
