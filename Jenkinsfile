@@ -13,7 +13,7 @@ pipeline {
 
     }
     stages {
-stage('Deploy and configure Appalince to join to 2019 Active Directory') {
+     stage('Deploy and configure Appalince to join to 2019 Active Directory') {
            steps {
              node('master') {
                  deleteDir()
@@ -34,7 +34,7 @@ stage('Deploy and configure Appalince to join to 2019 Active Directory') {
                          }
                     }
                }
-    stage('Run CRUD on nex2019.test.win2019.client') {
+     stage('Run CRUD on nex2019.test.win2019.client') {
            steps {
              node('nex2019.test.win2019.client') {
                  deleteDir()
