@@ -14,7 +14,7 @@ pipeline {
     }
     stages {
       stage('Run ALL Windows AD Tests in parallel') {
-            parallel {
+            //parallel {
               stage('Deploy and configure Appalince to join to 2019 Active Directory') {
                 steps {
                   node('master') {
@@ -46,7 +46,7 @@ pipeline {
                 }
           }
         }
-      }
+      //}
     }
   }
 }
