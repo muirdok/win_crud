@@ -13,7 +13,7 @@ pipeline {
 
     }
     stages {
-//      stage('Run ALL Windows AD Tests in parallel') {
+      stage('Run ALL Windows AD Tests in parallel') {
             parallel {
               stage('Deploy and configure Appalince to join to 2019 Active Directory') {
                 steps {
@@ -39,7 +39,7 @@ pipeline {
                                 }
                               }
                 steps {
-                  node('nex2019.test.win2019.client') {
+                  node(' Check nex2019.test.win2019.client') {
                       deleteDir()
                       git url: 'https://github.com/muirdok/win_crud.git'
                           powershell returnStatus: true, script: """p_tests\\MAP_and_TEST.ps1 -ns_ip ${APPALINCE_IP}"""
@@ -47,6 +47,6 @@ pipeline {
           }
         }
       }
-    //}
+    }
   }
 }
