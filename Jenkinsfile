@@ -35,14 +35,12 @@ pipeline {
                                     }
                                   }
                                 }
-                              }
-                steps {
                   node('nex2019.test.win2019.client') {
                       deleteDir()
                       git url: 'https://github.com/muirdok/win_crud.git'
                           powershell returnStatus: true, script: """p_tests\\MAP_and_TEST.ps1 -ns_ip ${APPALINCE_IP}"""
-                }
           }
         }
       }
     }
+}
