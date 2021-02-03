@@ -9,11 +9,11 @@ pipeline {
     parameters {
         string(name: 'AD_IP_2019', defaultValue: '10.3.69.70', description: 'Windows AD 2019 Server IP')
         string(name: 'AD_NAME_2019', defaultValue: 'nex2019.test', description: 'Windows AD 2019 Domain Name')
-        string(name: 'VM_NAME', defaultValue: 'mut_fc_winad', description: 'VM Name for VCenter')
+        string(name: 'VM_NAME', defaultValue: 'mut_firecrest_winad', description: 'VM Name for VCenter')
 
     }
     stages {
-        stage('Deploy and configure Appalince to join to 2019 Active Directory') {
+        stage('Deploy and configure appliance to join to 2019 Active Directory') {
                 steps {
                   node('master') {
                     deleteDir()

@@ -1,16 +1,16 @@
 #VmWare
-config_vsphere_host: "vcenter.hypernexenta.corp"
+config_vsphere_host: "vcenter67.hypernexenta.corp"
 config_vsphere_user: "administrator@vsphere.local"
-config_vsphere_password: "Nexenta1!"
-config_vsphere_datacenter: "AutoD"
-config_vsphere_cluster: "R720s"
-config_vsphere_folder: "Auto_CIFS"
+config_vsphere_password: "Nexenta@123"
+config_vsphere_datacenter: "qa_lab"
+config_vsphere_cluster: "autoD"
+config_vsphere_folder: "autoD_cifs"
 
 config_vm_name: "mut" #defined above in Jenkins file
-config_vm_guest: "otherGuest64"
+config_vm_guest: "solaris11_64Guest"
 config_vm_timeout: 30
-config_vm_net1: "1GB"
-config_vm_net2: "10GB"
-config_vm_datastore: "autoD"
+config_vm_net1: "VM Network"
+config_vm_net2: "DPortGroup"
+config_vm_datastore: "autoD_cifs"
 
 MAC_Firecrest_latest: "00:60:40:01"
