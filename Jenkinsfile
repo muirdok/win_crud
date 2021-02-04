@@ -43,7 +43,6 @@ pipeline {
           }
         }
       }
-    }
 
     stage('Deploy and configure appliance to join to 2016 Active Directory') {
             steps {
@@ -73,6 +72,6 @@ pipeline {
                       powershell returnStatus: true, script: """p_tests\\MAP_and_TEST.ps1 -ns_ip ${APPALINCE_IP}"""
                     }
                   }
-                }
               }
-}
+        }
+    }
